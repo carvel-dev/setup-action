@@ -10,7 +10,7 @@ Build all (format, build, pack, test):
 
     npm run all
 
-### Running a workflow locally
+## Running a workflow locally
 
 If you want to run the e2e tests locally to try out the action, install [act](https://github.com/nektos/act).
 
@@ -26,7 +26,7 @@ This will execute the test-e2e-specific-apps job, which runs the action configur
 
 Note: remember to run `build` and `pack` first, as the workflow will act upon the `dist/index.js` file.
 
-### Submitting PRs
+## Submitting PRs
 
 Before submitting a PR, you need to:
 
