@@ -1,0 +1,42 @@
+name: 'setup-k14s'
+description: 'Install k14s apps'
+author: 'John Brunton'
+branding:
+  color: 'green'
+  icon: 'play'
+inputs:
+  token:
+    description: "Github token to use to avoid rate limits"
+    require: false
+    default: null
+  only:
+    description: "List apps to download if you don't need all"
+    required: false
+    default: null
+  ytt:
+    description: 'Install ytt'
+    required: false
+    default: latest
+  kbld:
+    description: 'Install kbld'
+    required: false
+    default: latest
+  kapp:
+    description: 'Install kapp'
+    required: false
+    default: latest
+  kwt:
+    description: 'Install kwt'
+    required: false
+    default: latest
+  imgpkg:
+    description: 'Install imgpkg'
+    required: false
+    default: latest
+  vendir:
+    description: 'Install vendir'
+    required: false
+    default: latest
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

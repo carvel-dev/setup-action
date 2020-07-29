@@ -1,0 +1,68 @@
+name: test
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - 'releases/*'
+
+jobs:
+  test-e2e-all:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: "${{ matrix.os }}"
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - run: npm install
+    - name: check all apps installed
+      if: matrix.os != 'windows-latest'
+      run: npm run verify:installed ytt kbld kapp kwt imgpkg vendir
+    - name: check all apps installed (windows)
+      if: matrix.os == 'windows-latest'
+      run: npm run verify:installed ytt kbld kapp imgpkg vendir
+    - name: check apps are usable
+      run: |
+        npm run verify:output "ytt -f ./test/e2e/ytt-example" "greeting: Hello, World"
+
+  test-e2e-specific-apps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        only: ytt, kbld
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - run: npm install
+    - name: check specific apps are installs
+      run: |
+        npm run verify:installed ytt kbld
+        npm run verify:not:installed kapp kwt imgpkg vendir
+
+  test-e2e-specific-version:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        only: ytt
+        ytt: v0.27.0
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - run: npm install
+    - name: check specific version is installed
+      run: npm run verify:version ytt 0.27.0
+
+  test-e2e-no-token:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./
+      with:
+        only: ytt
+    - run: npm install
+    - name: verify app installed without a token
+      run: npm run verify:installed ytt

@@ -1,0 +1,17 @@
+name: build
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - 'releases/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: npm install
+    - run: npm run all
+    - name: check build up to date
+      run: git diff --exit-code --stat HEAD
