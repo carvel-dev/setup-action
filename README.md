@@ -1,3 +1,7 @@
+# Under Development
+
+Note: this action has not yet been published, but it will be shortly.
+
 # setup-k14s
 
 A Github Action to install k14s apps (such as ytt, kbld, kapp, etc.).
@@ -10,7 +14,7 @@ By default, installs latest versions of `ytt`, `kbld`, `kapp`, `kwt`, `imgpkg` a
 
 ```yaml
 steps:
-- uses: jbrunton/setup-k14s@v1
+- uses: k14s/setup-k14s@v1
 - run: |
     ytt version
     kbld version
@@ -20,7 +24,7 @@ steps:
 
 ```yaml
 steps:
-- uses: jbrunton/setup-k14s@v1
+- uses: k14s/setup-k14s@v1
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
 - run: |
@@ -32,7 +36,7 @@ To install only specific apps:
 
 ```yaml
 steps:
-- uses: jbrunton/setup-k14s@v1
+- uses: k14s/setup-k14s@v1
   with:
     only: ytt, kbld
 - run: |
@@ -44,7 +48,7 @@ To use a specific version of an app:
 
 ```yaml
 steps:
-- uses: jbrunton/setup-k14s@v1
+- uses: k14s/setup-k14s@v1
   with:
     only: ytt, kbld
     kbld: v0.28.0
