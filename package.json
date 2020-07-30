@@ -1,8 +1,7 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "setup-k14s",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "A Github Action to install k14s apps (such as ytt, kbld, kapp, etc.)",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -18,17 +17,6 @@
     "verify:version": "node test/e2e/verify_version.js",
     "verify:output": "node test/e2e/verify_output.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
-  },
-  "keywords": [
-    "actions",
-    "node",
-    "setup"
-  ],
-  "author": "YourNameOrOrganization",
-  "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
