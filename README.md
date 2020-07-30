@@ -4,7 +4,7 @@ Note: this action has not yet been published, but it will be shortly.
 
 # setup-k14s
 
-A Github Action to install k14s apps (such as ytt, kbld, kapp, etc.).
+A [Github Action](https://github.com/features/actions) to install k14s apps (such as ytt, kbld, kapp, etc.)
 
 - Slack: [#k14s in Kubernetes slack](https://slack.kubernetes.io)
 
