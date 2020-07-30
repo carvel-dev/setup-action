@@ -1,40 +1,40 @@
-name: 'setup-k14s'
-description: 'Install k14s apps'
+name: setup-k14s
+description: Install k14s apps
 author: 'John Brunton'
 branding:
   color: 'green'
   icon: 'play'
 inputs:
   token:
-    description: "Github token to use to avoid rate limits"
-    require: false
-    default: null
-  only:
-    description: "List apps to download if you don't need all"
+    description: Github token to use to avoid rate limits
     required: false
-    default: null
+    default: ""
+  only:
+    description: List apps to download if you don't need all
+    required: false
+    default: ""
   ytt:
-    description: 'Install ytt'
+    description: ytt version
     required: false
     default: latest
   kbld:
-    description: 'Install kbld'
+    description: kbld version
     required: false
     default: latest
   kapp:
-    description: 'Install kapp'
+    description: kapp version
     required: false
     default: latest
   kwt:
-    description: 'Install kwt'
+    description: kwt version
     required: false
     default: latest
   imgpkg:
-    description: 'Install imgpkg'
+    description: imgpkg version
     required: false
     default: latest
   vendir:
-    description: 'Install vendir'
+    description: vendir version
     required: false
     default: latest
 runs:
