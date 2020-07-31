@@ -1,13 +1,7 @@
-import {
-  Octokit,
-  OctokitResponse,
-  
-  ReposListReleasesItem,
-  ReposListReleasesParameters,
-  ReposListReleasesResponseData
-} from '../../src/adapters/octokit';
 import { MockProxy, mockDeep } from 'jest-mock-extended';
 import { isEqual } from './matchers'
+import { ReposListReleasesParameters } from '@jbrunton/gha-installer';
+import { ReposListReleasesItem, Octokit, OctokitResponse, ReposListReleasesResponseData } from '@jbrunton/gha-installer/lib/octokit';
 
 interface TestMethods {
   stubListReleasesResponse(params: ReposListReleasesParameters, releases: Array<ReposListReleasesItem>): void

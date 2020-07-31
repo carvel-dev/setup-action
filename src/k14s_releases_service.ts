@@ -6,15 +6,14 @@ import {
   GitHubDownloadInfo,
   DownloadInfo
 } from '@jbrunton/gha-installer'
-import {ActionsCore, Environment} from '@jbrunton/gha-installer/lib/interfaces'
+import {ActionsCore, Environment, FileSystem} from '@jbrunton/gha-installer/lib/interfaces'
 import {ReposListReleasesItem} from '@jbrunton/gha-installer/lib/octokit'
-import {FileSystem} from './interfaces'
 import * as crypto from 'crypto'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as core from '@actions/core'
 
-export class ReleasesService extends GitHubReleasesService {
+export class K14sReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
   // for each downloaded file, a map from browser_download_url to the release data itself
   private _downloadedFiles: Map<string, ReposListReleasesItem>
@@ -64,16 +63,16 @@ export class ReleasesService extends GitHubReleasesService {
     }
   }
 
-  static create(octokit: Octokit): ReleasesService {
-    return new ReleasesService(core, process, fs, octokit)
+  static create(octokit: Octokit): K14sReleasesService {
+    return new K14sReleasesService(core, process, fs, octokit)
   }
 }
 
-function getRepo(app: AppInfo): ReposListReleasesParameters {
+export function getRepo(app: AppInfo): ReposListReleasesParameters {
   return {owner: 'k14s', repo: app.name}
 }
 
-function getAssetName(platform: string, app: AppInfo): string {
+export function getAssetName(platform: string, app: AppInfo): string {
   return `${app.name}-${getAssetSuffix(platform)}`
 }
 

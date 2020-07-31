@@ -1,10 +1,7 @@
-import { Installer } from '../../src/installer'
 import { mock, MockProxy } from 'jest-mock-extended'
-import { ActionsCore } from '../../src/adapters/core'
-import { ActionsToolCache } from '../../src/adapters/cache'
-import { FileSystem } from '../../src/adapters/fs'
-import { ReleasesService } from '../../src/releases_service'
-import { DownloadInfo } from '../../src/types'
+import { Installer, GitHubDownloadInfo, DownloadService } from '@jbrunton/gha-installer'
+import { ActionsCore, ActionsToolCache, FileSystem } from '@jbrunton/gha-installer/lib/interfaces'
+import { ReposListReleasesItem } from '@jbrunton/gha-installer/lib/octokit'
 
 describe('Installer', () => {
   const app = { name: "ytt", version: "0.28.0" }
@@ -43,14 +40,15 @@ describe('Installer', () => {
 
   function createInstaller(platform: "win32" | "linux"): Installer {
     const env = { platform: platform }
-    const releasesService = mock<ReleasesService>()
+    const releasesService = mock<DownloadService>()
     installer = new Installer(core, cache, fs, env, releasesService)
 
-    const downloadInfo: DownloadInfo = {
+    const downloadInfo: GitHubDownloadInfo = {
       version: "0.28.0",
       url: downloadUrls[platform],
-      assetName: assetNames[platform],
-      releaseNotes: `* some cool stuff\n${expectedChecksums[platform]}`
+      release: {
+        body: `* cool stuff\n${expectedChecksums[platform]}`
+      } as ReposListReleasesItem
     }
     releasesService.getDownloadInfo
       .calledWith(app)

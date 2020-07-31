@@ -1,47 +1,45 @@
-import { ReleasesService } from '../../src/releases_service'
-import { ActionsCore } from '../../src/adapters/core'
+import { K14sReleasesService, getAssetName } from '../../src/k14s_releases_service'
 import { mock } from 'jest-mock-extended';
-import { ReposListReleasesItem } from '../../src/adapters/octokit'
 import { TestOctokit, createTestOctokit } from '../fixtures/test_octokit'
+import { ActionsCore, FileSystem } from '@jbrunton/gha-installer/lib/interfaces';
+import { ReposListReleasesItem } from '@jbrunton/gha-installer/lib/octokit';
 
 describe('ReleasesService', () => {
 
   function createService(platform: string, octokit: TestOctokit = createTestOctokit()) {
     const env = { platform: platform }
     const core = mock<ActionsCore>()
-    return new ReleasesService(env, core, octokit)
+    const fs = mock<FileSystem>()
+    return new K14sReleasesService(core, env, fs, octokit)
   }
 
   test('getAssetName()', () => {
     {
-      const service = createService("linux")
-      const assetName = service["getAssetName"]("ytt")
+      const assetName = getAssetName('linux', { name: 'ytt', version: '0.28.0' })
       expect(assetName).toEqual("ytt-linux-amd64")
     }
     {
-      const service = createService("win32")
-      const assetName = service["getAssetName"]("kbld")
-      expect(assetName).toEqual("kbld-windows-amd64.exe")
+      const assetName = getAssetName('win32', { name: 'ytt', version: '0.28.0' })
+      expect(assetName).toEqual("ytt-windows-amd64.exe")
     }
     {
-      const service = createService("darwin")
-      const assetName = service["getAssetName"]("kapp")
-      expect(assetName).toEqual("kapp-darwin-amd64")
+      const assetName = getAssetName('darwin', { name: 'kbld', version: '0.10.0' })
+      expect(assetName).toEqual("kbld-darwin-amd64")
     }
   })
 
   function releaseJsonFor(app: string, version: string): ReposListReleasesItem {
     return {
-      name: version,
+      tag_name: version,
       assets: [{
-        browser_download_url: `https://example.com/k14s/ytt/releases/download/v${version}/ytt-darwin-amd64`,
+        browser_download_url: `https://example.com/k14s/ytt/releases/download/${version}/ytt-linux-amd64`,
         name: `${app}-linux-amd64`
       }]
     } as ReposListReleasesItem
   }
 
   describe('getDownloadInfoForAsset()', () => {
-    let service: ReleasesService
+    let service: K14sReleasesService
     let octokit: TestOctokit
 
     function stubListReleasesResponse(releases: Array<ReposListReleasesItem>) {
@@ -62,9 +60,8 @@ describe('ReleasesService', () => {
       const downloadInfo = await service.getDownloadInfo({ name: "ytt", version: "0.27.0" })
       expect(downloadInfo).toEqual({
         version: "0.27.0",
-        url: "https://example.com/k14s/ytt/releases/download/v0.27.0/ytt-darwin-amd64",
-        assetName: "ytt-linux-amd64",
-        releaseNotes: undefined
+        url: "https://example.com/k14s/ytt/releases/download/0.27.0/ytt-linux-amd64",
+        release: releaseJsonFor("ytt", "0.27.0")
       })
     })
 
@@ -77,9 +74,8 @@ describe('ReleasesService', () => {
       const downloadInfo = await service.getDownloadInfo({ name: "ytt", version: "latest" })
       expect(downloadInfo).toEqual({
         version: "0.28.0",
-        url: "https://example.com/k14s/ytt/releases/download/v0.28.0/ytt-darwin-amd64",
-        assetName: "ytt-linux-amd64",
-        releaseNotes: undefined
+        url: "https://example.com/k14s/ytt/releases/download/0.28.0/ytt-linux-amd64",
+        release: releaseJsonFor("ytt", "0.28.0")
       })
     })
 
@@ -90,22 +86,6 @@ describe('ReleasesService', () => {
       ])
       const result = service.getDownloadInfo({ name: "ytt", version: "not-a-version" })
       await expect(result).rejects.toThrowError('Could not find version "not-a-version" for ytt')
-    })
-  })
-
-  describe('sortReleases()', () => {
-    test('it sorts non-semver names last', () => {
-      const service = createService("linux", createTestOctokit())
-      const releases = [
-        releaseJsonFor("ytt", "0.1.2"),
-        releaseJsonFor("ytt", "0.28.0"),
-        releaseJsonFor("ytt", "0.2.0 - initial release"), // some apps have a "0.1.0 - initial release" version
-        releaseJsonFor("ytt", "0.27.0")
-      ]
-
-      const orderedResults = service["sortReleases"](releases).map(result => result.name)
-      
-      expect(orderedResults).toEqual(["0.28.0", "0.27.0", "0.1.2", "0.2.0 - initial release"])
     })
   })
 })
