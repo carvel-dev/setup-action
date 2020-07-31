@@ -1,6 +1,5 @@
-import {ActionsCore} from './adapters/core'
-import {Environment} from './adapters/environment'
-import {AppInfo} from './types'
+import {ActionsCore, Environment} from '@jbrunton/gha-installer/lib/interfaces'
+import {AppInfo} from '@jbrunton/gha-installer'
 
 export const k14sApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir']
 

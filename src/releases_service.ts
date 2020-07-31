@@ -1,7 +1,14 @@
-import { GitHubReleasesService, Octokit, AppInfo, ReposListReleasesParameters, GitHubDownloadInfo, DownloadInfo} from '@jbrunton/gha-installer'
-import { ActionsCore, Environment } from '@jbrunton/gha-installer/lib/interfaces'
-import { ReposListReleasesItem } from '@jbrunton/gha-installer/lib/octokit'
-import { FileSystem } from './interfaces'
+import {
+  GitHubReleasesService,
+  Octokit,
+  AppInfo,
+  ReposListReleasesParameters,
+  GitHubDownloadInfo,
+  DownloadInfo
+} from '@jbrunton/gha-installer'
+import {ActionsCore, Environment} from '@jbrunton/gha-installer/lib/interfaces'
+import {ReposListReleasesItem} from '@jbrunton/gha-installer/lib/octokit'
+import {FileSystem} from './interfaces'
 import * as crypto from 'crypto'
 import * as path from 'path'
 import * as fs from 'fs'
@@ -38,7 +45,11 @@ export class ReleasesService extends GitHubReleasesService {
     this.verifyChecksum(path, release, core)
   }
 
-  private verifyChecksum(downloadPath: string, release: ReposListReleasesItem, core: ActionsCore) {
+  private verifyChecksum(
+    downloadPath: string,
+    release: ReposListReleasesItem,
+    core: ActionsCore
+  ) {
     const data = this._fs.readFileSync(downloadPath)
     const assetName = path.basename(downloadPath)
     const digest = crypto.createHash('sha256').update(data).digest('hex')
@@ -58,7 +69,7 @@ export class ReleasesService extends GitHubReleasesService {
 }
 
 function getRepo(app: AppInfo): ReposListReleasesParameters {
-  return { owner: 'k14s', repo: app.name }
+  return {owner: 'k14s', repo: app.name}
 }
 
 function getAssetName(platform: string, app: AppInfo): string {
