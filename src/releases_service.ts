@@ -1,94 +1,77 @@
-import {AppInfo, DownloadInfo} from './types'
-import {ActionsCore} from './adapters/core'
-import {Environment} from './adapters/environment'
-import {
-  Octokit,
-  ReposListReleasesItem,
-  ReposListReleasesResponseData
-} from './adapters/octokit'
-import * as semver from 'semver'
+import { GitHubReleasesService, Octokit, AppInfo, ReposListReleasesParameters, GitHubDownloadInfo, DownloadInfo} from '@jbrunton/gha-installer'
+import { ActionsCore, Environment } from '@jbrunton/gha-installer/lib/interfaces'
+import { ReposListReleasesItem } from '@jbrunton/gha-installer/lib/octokit'
+import { FileSystem } from './interfaces'
+import * as crypto from 'crypto'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as core from '@actions/core'
 
-export class ReleasesService {
-  private _env: Environment
-  private _core: ActionsCore
-  private _octokit: Octokit
+export class ReleasesService extends GitHubReleasesService {
+  private _fs: FileSystem
+  // for each downloaded file, a map from browser_download_url to the release data itself
+  private _downloadedFiles: Map<string, ReposListReleasesItem>
 
-  constructor(env: Environment, core: ActionsCore, octokit: Octokit) {
-    this._env = env
-    this._core = core
-    this._octokit = octokit
+  constructor(
+    core: ActionsCore,
+    env: Environment,
+    fs: FileSystem,
+    octokit: Octokit
+  ) {
+    super(core, env, octokit, getRepo, getAssetName)
+    this._fs = fs
+    this._downloadedFiles = new Map<string, ReposListReleasesItem>()
   }
 
-  async getDownloadInfo(app: AppInfo): Promise<DownloadInfo> {
-    const assetName = this.getAssetName(app.name)
-    const repo = {owner: 'k14s', repo: app.name}
-
-    const response = await this._octokit.repos.listReleases(repo)
-    const releases: ReposListReleasesResponseData = response.data
-
-    if (app.version == 'latest') {
-      const release = this.sortReleases(releases)[0]
-      this._core.debug(`Using latest version for ${app.name} (${release.name})`)
-      return this.getDownloadInfoForAsset(app, assetName, release)
-    }
-
-    for (const candidate of releases) {
-      if (candidate.name == app.version) {
-        return this.getDownloadInfoForAsset(app, assetName, candidate)
-      }
-    }
-
-    throw new Error(`Could not find version "${app.version}" for ${app.name}`)
-  }
-
-  private getDownloadInfoForAsset(
-    app: AppInfo,
-    assetName: string,
-    release: ReposListReleasesItem
-  ): DownloadInfo {
-    for (const candidate of release.assets) {
-      if (candidate.name == assetName) {
-        this._core.debug(`Found executable ${assetName} for ${describe(app)}`)
-        return {
-          version: release.name,
-          assetName: assetName,
-          url: candidate.browser_download_url,
-          releaseNotes: release.body
-        }
-      }
-    }
-    throw new Error(
-      `Could not find executable ${assetName} for ${describe(app)}`
-    )
-  }
-
-  private sortReleases(
-    releases: Array<ReposListReleasesItem>
-  ): Array<ReposListReleasesItem> {
-    return releases.sort((release1, release2) => {
-      // note: if a name isn't in semver format (e.g. "0.1.0 - initial release"), we put it last
-      const version1 = semver.clean(release1.name) || '0.0.0'
-      const version2 = semver.clean(release2.name) || '0.0.0'
-      return semver.rcompare(version1, version2)
+  getDownloadInfo(app: AppInfo): Promise<GitHubDownloadInfo> {
+    return super.getDownloadInfo(app).then(info => {
+      this._downloadedFiles.set(info.url, info.release)
+      return info
     })
   }
 
-  private getAssetName(appName: string): string {
-    return `${appName}-${this.getAssetSuffix()}`
+  onFileDownloaded(path: string, info: DownloadInfo, core: ActionsCore): void {
+    const release = this._downloadedFiles.get(info.url)
+    if (release == undefined) {
+      throw new Error(`Unable to find release information for ${info.url}`)
+    }
+    this.verifyChecksum(path, release, core)
   }
 
-  private getAssetSuffix(): string {
-    switch (this._env.platform) {
-      case 'win32':
-        return 'windows-amd64.exe'
-      case 'darwin':
-        return 'darwin-amd64'
-      default:
-        return 'linux-amd64'
+  private verifyChecksum(downloadPath: string, release: ReposListReleasesItem, core: ActionsCore) {
+    const data = this._fs.readFileSync(downloadPath)
+    const assetName = path.basename(downloadPath)
+    const digest = crypto.createHash('sha256').update(data).digest('hex')
+    const expectedChecksum = `${digest}  ./${assetName}`
+    if (release.body.includes(expectedChecksum)) {
+      core.info(`✅  Verified checksum: "${expectedChecksum}"`)
+    } else {
+      throw new Error(
+        `Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`
+      )
     }
+  }
+
+  static create(octokit: Octokit): ReleasesService {
+    return new ReleasesService(core, process, fs, octokit)
   }
 }
 
-function describe(app: AppInfo): string {
-  return `${app.name} ${app.version}`
+function getRepo(app: AppInfo): ReposListReleasesParameters {
+  return { owner: 'k14s', repo: app.name }
+}
+
+function getAssetName(platform: string, app: AppInfo): string {
+  return `${app.name}-${getAssetSuffix(platform)}`
+}
+
+function getAssetSuffix(platform: string): string {
+  switch (platform) {
+    case 'win32':
+      return 'windows-amd64.exe'
+    case 'darwin':
+      return 'darwin-amd64'
+    default:
+      return 'linux-amd64'
+  }
 }
