@@ -2335,11 +2335,11 @@ class ReleasesService extends gha_installer_1.GitHubReleasesService {
         if (release == undefined) {
             throw new Error(`Unable to find release information for ${info.url}`);
         }
-        this.verifyChecksum(path, release, core);
+        this.verifyChecksum(path, info, release, core);
     }
-    verifyChecksum(downloadPath, release, core) {
+    verifyChecksum(downloadPath, info, release, core) {
         const data = this._fs.readFileSync(downloadPath);
-        const assetName = path.basename(downloadPath);
+        const assetName = path.basename(info.url);
         const digest = crypto.createHash('sha256').update(data).digest('hex');
         const expectedChecksum = `${digest}  ./${assetName}`;
         if (release.body.includes(expectedChecksum)) {
