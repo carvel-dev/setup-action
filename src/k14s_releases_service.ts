@@ -16,6 +16,7 @@ import * as crypto from 'crypto'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as core from '@actions/core'
+import { GitHubDownloadInfo } from '@jbrunton/gha-installer/lib/github_releases_service'
 
 export class K14sReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
@@ -43,11 +44,10 @@ export class K14sReleasesService extends GitHubReleasesService {
     info: DownloadInfo<GitHubDownloadMeta>,
     core: ActionsCore
   ) {
-    const releaseNotes = info.meta.release.body
-    const data = this._fs.readFileSync(downloadPath)
+    const digest = this.computeDigest(downloadPath)
     const assetName = path.basename(info.url)
-    const digest = crypto.createHash('sha256').update(data).digest('hex')
     const expectedChecksum = `${digest}  ./${assetName}`
+    const releaseNotes = info.meta.release.body
     if (releaseNotes.includes(expectedChecksum)) {
       core.info(`✅  Verified checksum: "${expectedChecksum}"`)
     } else {
@@ -55,6 +55,12 @@ export class K14sReleasesService extends GitHubReleasesService {
         `Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`
       )
     }
+  }
+
+  private computeDigest(downloadPath: string): string {
+    const data = this._fs.readFileSync(downloadPath)
+    const digest = crypto.createHash('sha256').update(data).digest('hex')
+    return digest
   }
 
   static create(octokit: Octokit): K14sReleasesService {
