@@ -1,6 +1,6 @@
 import { Inputs, k14sApps } from '../../src/inputs'
-import { ActionsCore } from '../../src/adapters/core'
 import { mock } from 'jest-mock-extended';
+import { ActionsCore } from '@jbrunton/gha-installer/lib/interfaces';
 
 describe('Inputs', () => {
   function createInputs(platform: string, inputs: {[key: string]: string} = {}): Inputs {
