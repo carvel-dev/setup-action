@@ -64,7 +64,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
     - run: npm install
     - name: check specific version is installed
-      run: npm run verify:version ytt 0.27.0
+      run: npm run verify:output "ytt version" "ytt version 0.27.0"
 
   test-e2e-no-token:
     runs-on: ubuntu-latest

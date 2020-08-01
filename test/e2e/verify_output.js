@@ -8,9 +8,6 @@ if (process.argv.length != 4) {
 const command = process.argv[2]
 const expectedOutput = process.argv[3]
 
-console.log(command)
-console.log(expectedOutput)
-
 const output = shell.exec(command, { silent: true }).stdout.trim()
 if (output == expectedOutput) {
   console.log(`✅  Verified output from "${command}" was "${output}"`)
