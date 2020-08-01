@@ -2287,93 +2287,6 @@ module.exports = windowsRelease;
 
 /***/ }),
 
-/***/ 50:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReleasesService = void 0;
-const gha_installer_1 = __webpack_require__(293);
-const crypto = __importStar(__webpack_require__(417));
-const path = __importStar(__webpack_require__(622));
-const fs = __importStar(__webpack_require__(747));
-const core = __importStar(__webpack_require__(470));
-class ReleasesService extends gha_installer_1.GitHubReleasesService {
-    constructor(core, env, fs, octokit) {
-        super(core, env, octokit, getRepo, getAssetName);
-        this._fs = fs;
-        this._downloadedFiles = new Map();
-    }
-    getDownloadInfo(app) {
-        return super.getDownloadInfo(app).then(info => {
-            this._downloadedFiles.set(info.url, info.release);
-            return info;
-        });
-    }
-    onFileDownloaded(path, info, core) {
-        const release = this._downloadedFiles.get(info.url);
-        if (release == undefined) {
-            throw new Error(`Unable to find release information for ${info.url}`);
-        }
-        this.verifyChecksum(path, info, release, core);
-    }
-    verifyChecksum(downloadPath, info, release, core) {
-        const data = this._fs.readFileSync(downloadPath);
-        const assetName = path.basename(info.url);
-        const digest = crypto.createHash('sha256').update(data).digest('hex');
-        const expectedChecksum = `${digest}  ./${assetName}`;
-        if (release.body.includes(expectedChecksum)) {
-            core.info(`✅  Verified checksum: "${expectedChecksum}"`);
-        }
-        else {
-            throw new Error(`Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`);
-        }
-    }
-    static create(octokit) {
-        return new ReleasesService(core, process, fs, octokit);
-    }
-}
-exports.ReleasesService = ReleasesService;
-function getRepo(app) {
-    return { owner: 'k14s', repo: app.name };
-}
-function getAssetName(platform, app) {
-    return `${app.name}-${getAssetSuffix(platform)}`;
-}
-function getAssetSuffix(platform) {
-    switch (platform) {
-        case 'win32':
-            return 'windows-amd64.exe';
-        case 'darwin':
-            return 'darwin-amd64';
-        default:
-            return 'linux-amd64';
-    }
-}
-
-
-/***/ }),
-
 /***/ 65:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
@@ -2675,6 +2588,89 @@ module.exports = SemVer
 /***/ (function(module) {
 
 module.exports = require("os");
+
+/***/ }),
+
+/***/ 101:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAssetName = exports.getRepo = exports.K14sReleasesService = void 0;
+const gha_installer_1 = __webpack_require__(293);
+const crypto = __importStar(__webpack_require__(417));
+const path = __importStar(__webpack_require__(622));
+const fs = __importStar(__webpack_require__(747));
+const core = __importStar(__webpack_require__(470));
+class K14sReleasesService extends gha_installer_1.GitHubReleasesService {
+    constructor(core, env, fs, octokit) {
+        super(core, env, octokit, getRepo, getAssetName);
+        this._fs = fs;
+    }
+    onFileDownloaded(path, info, core) {
+        this.verifyChecksum(path, info, core);
+    }
+    verifyChecksum(downloadPath, info, core) {
+        const digest = this.computeDigest(downloadPath);
+        const assetName = path.basename(info.url);
+        const expectedChecksum = `${digest}  ./${assetName}`;
+        const releaseNotes = info.meta.release.body;
+        if (releaseNotes.includes(expectedChecksum)) {
+            core.info(`✅  Verified checksum: "${expectedChecksum}"`);
+        }
+        else {
+            throw new Error(`Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`);
+        }
+    }
+    computeDigest(downloadPath) {
+        const data = this._fs.readFileSync(downloadPath);
+        const digest = crypto.createHash('sha256').update(data).digest('hex');
+        return digest;
+    }
+    static create(octokit) {
+        return new K14sReleasesService(core, process, fs, octokit);
+    }
+}
+exports.K14sReleasesService = K14sReleasesService;
+function getRepo(app) {
+    return { owner: 'k14s', repo: app.name };
+}
+exports.getRepo = getRepo;
+function getAssetName(platform, app) {
+    return `${app.name}-${getAssetSuffix(platform)}`;
+}
+exports.getAssetName = getAssetName;
+function getAssetSuffix(platform) {
+    switch (platform) {
+        case 'win32':
+            return 'windows-amd64.exe';
+        case 'darwin':
+            return 'darwin-amd64';
+        default:
+            return 'linux-amd64';
+    }
+}
+
 
 /***/ }),
 
@@ -5584,7 +5580,7 @@ class GitHubReleasesService {
                 return {
                     version: release.tag_name,
                     url: candidate.browser_download_url,
-                    release: release
+                    meta: { release: release }
                 };
             }
         }
@@ -5694,11 +5690,11 @@ const github = __importStar(__webpack_require__(469));
 const utils_1 = __webpack_require__(521);
 const inputs_1 = __webpack_require__(854);
 const gha_installer_1 = __webpack_require__(293);
-const releases_service_1 = __webpack_require__(50);
+const k14s_releases_service_1 = __webpack_require__(101);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = createOctokit();
-        const releasesService = releases_service_1.ReleasesService.create(octokit);
+        const releasesService = k14s_releases_service_1.K14sReleasesService.create(octokit);
         const installer = gha_installer_1.Installer.create(releasesService);
         try {
             console.time('download apps');
