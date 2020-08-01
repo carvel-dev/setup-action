@@ -11,12 +11,10 @@ import {
   Environment,
   FileSystem
 } from '@jbrunton/gha-installer/lib/interfaces'
-import {ReposListReleasesItem} from '@jbrunton/gha-installer/lib/octokit'
 import * as crypto from 'crypto'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as core from '@actions/core'
-import {GitHubDownloadInfo} from '@jbrunton/gha-installer/lib/github_releases_service'
 
 export class K14sReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
