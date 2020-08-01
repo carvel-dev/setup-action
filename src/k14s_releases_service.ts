@@ -3,10 +3,14 @@ import {
   Octokit,
   AppInfo,
   ReposListReleasesParameters,
-  GitHubDownloadInfo,
-  DownloadInfo
+  DownloadInfo,
+  GitHubDownloadMeta
 } from '@jbrunton/gha-installer'
-import {ActionsCore, Environment, FileSystem} from '@jbrunton/gha-installer/lib/interfaces'
+import {
+  ActionsCore,
+  Environment,
+  FileSystem
+} from '@jbrunton/gha-installer/lib/interfaces'
 import {ReposListReleasesItem} from '@jbrunton/gha-installer/lib/octokit'
 import * as crypto from 'crypto'
 import * as path from 'path'
@@ -15,8 +19,6 @@ import * as core from '@actions/core'
 
 export class K14sReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
-  // for each downloaded file, a map from browser_download_url to the release data itself
-  private _downloadedFiles: Map<string, ReposListReleasesItem>
 
   constructor(
     core: ActionsCore,
@@ -26,35 +28,27 @@ export class K14sReleasesService extends GitHubReleasesService {
   ) {
     super(core, env, octokit, getRepo, getAssetName)
     this._fs = fs
-    this._downloadedFiles = new Map<string, ReposListReleasesItem>()
   }
 
-  getDownloadInfo(app: AppInfo): Promise<GitHubDownloadInfo> {
-    return super.getDownloadInfo(app).then(info => {
-      this._downloadedFiles.set(info.url, info.release)
-      return info
-    })
-  }
-
-  onFileDownloaded(path: string, info: DownloadInfo, core: ActionsCore): void {
-    const release = this._downloadedFiles.get(info.url)
-    if (release == undefined) {
-      throw new Error(`Unable to find release information for ${info.url}`)
-    }
-    this.verifyChecksum(path, info, release, core)
+  onFileDownloaded(
+    path: string,
+    info: DownloadInfo<GitHubDownloadMeta>,
+    core: ActionsCore
+  ): void {
+    this.verifyChecksum(path, info, core)
   }
 
   private verifyChecksum(
     downloadPath: string,
-    info: DownloadInfo,
-    release: ReposListReleasesItem,
+    info: DownloadInfo<GitHubDownloadMeta>,
     core: ActionsCore
   ) {
+    const releaseNotes = info.meta.release.body
     const data = this._fs.readFileSync(downloadPath)
     const assetName = path.basename(info.url)
     const digest = crypto.createHash('sha256').update(data).digest('hex')
     const expectedChecksum = `${digest}  ./${assetName}`
-    if (release.body.includes(expectedChecksum)) {
+    if (releaseNotes.includes(expectedChecksum)) {
       core.info(`✅  Verified checksum: "${expectedChecksum}"`)
     } else {
       throw new Error(
