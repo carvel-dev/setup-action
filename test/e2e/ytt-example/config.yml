@@ -1,0 +1,2 @@
+#@ load("@ytt:data", "data")
+greeting: #@ "Hello, {audience}".format(audience = data.values.audience)
