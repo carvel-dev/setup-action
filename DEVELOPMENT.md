@@ -36,3 +36,8 @@ Before submitting a PR, you need to:
 You can do this with `npm run prepare`.
 
 If you forget, the `check build up to date` build step will fail.
+
+## Releasing
+
+1. Publish a release to the Marketplace with a semver name, e.g. `v1.2.3`. (Note: the `v` prefix is important, as are the minor and patch versions. `1.2.3` and `v1.2` aren't valid if you want the automated workflow in #2 to do its thing.)
+2. If this is the latest release per semver naming then the [release workflow](https://github.com/k14s/setup-k14s-action/actions?query=workflow%3Arelease) will automatically update the major tag for the release (e.g. if you release v1.2.3 it will update the `v1` tag to point to the same commit as `v1.2.3`).
