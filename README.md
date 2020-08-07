@@ -55,4 +55,4 @@ steps:
 
 ## Development
 
-See [DEVELOPMENT.md](https://github.com/k14s/setup-k14s-action/blob/develop/DEVELOPMENT.md).
+See [DEVELOPMENT](https://github.com/k14s/setup-k14s-action/blob/develop/DEVELOPMENT.md).
