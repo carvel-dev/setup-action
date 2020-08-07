@@ -1,0 +1,45 @@
+name: release
+
+on:
+  release:
+    types: [published]
+    
+env:
+  THIS_RELEASE: ${{ github.event.release.tag }}
+
+jobs:
+  
+  # This job updates the major version tag (e.g. "v1") to the published release commit IFF:
+  #
+  #   1. The release name is in semver format.
+  #   2. The release is the "latest" (according to semver), not a patch for an old release.
+  #
+  # If these criteria are met, then it will update the major version tag to the release commit.
+  update_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+                  
+      - name: get latest release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LATEST_RELEASE=$(hub release | grep -E '^[0-9]+.[0-9]+.[0-9]+$' | sort -r | head -n 1)
+          echo "latest release: $LATEST_RELEASE"
+          echo ::set-env name=LATEST_RELEASE::$LATEST_RELEASE
+      - name: update major tag
+        if: env.THIS_RELEASE == env.LATEST_RELEASE
+        run: |
+          MAJOR_VERSION=$(echo $THIS_RELEASE | grep -Eo '^[0-9]+')
+          MAJOR_TAG="v$MAJOR_VERSION"
+          echo "this release ($THIS_RELEASE) is the latest, updating major tag $MAJOR_TAG"
+          
+          git config --global user.email "jbrunton-ci-minion@outlook.com"
+          git config --global user.name "jbrunton-ci-minion"
+          git tag -fa $MAJOR_TAG -m "Update $MAJOR_TAG tag for release $THIS_RELEASE"
+          git push origin $MAJOR_TAG --force
+      
+      - name: skip update
+        if: env.THIS_RELEASE != env.LATEST_RELEASE
+        run: echo "this release ($THIS_RELEASE) is not the latest ($LATEST_RELEASE) (perhaps a patch, or not in semver format?), skipping major tag update"
+  
