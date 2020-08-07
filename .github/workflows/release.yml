@@ -24,14 +24,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          LATEST_RELEASE=$(hub release | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -r | head -n 1)
+          LATEST_RELEASE=$(hub release | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -r | head -n 1)
           echo "latest release: $LATEST_RELEASE"
           echo ::set-env name=LATEST_RELEASE::$LATEST_RELEASE
       - name: update major tag
         if: env.THIS_RELEASE == env.LATEST_RELEASE
         run: |
-          MAJOR_VERSION=$(echo $THIS_RELEASE | grep -Eo '^[0-9]+')
-          MAJOR_TAG="v$MAJOR_VERSION"
+          MAJOR_TAG=$(echo $THIS_RELEASE | grep -Eo '^v[0-9]+')
           echo "this release ($THIS_RELEASE) is the latest, updating major tag $MAJOR_TAG"
           
           git config --global user.email "jbrunton-ci-minion@outlook.com"
@@ -42,4 +41,4 @@ jobs:
       - name: skip update
         if: env.THIS_RELEASE != env.LATEST_RELEASE
         run: echo "this release ($THIS_RELEASE) is not the latest ($LATEST_RELEASE) (perhaps a patch, or not in semver format?), skipping major tag update"
-  
+
