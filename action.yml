@@ -1,6 +1,6 @@
 name: setup-k14s-action
 description: Install k14s apps
-author: 'John Brunton'
+author: The K14s Authors
 branding:
   color: 'green'
   icon: 'play'
