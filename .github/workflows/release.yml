@@ -33,8 +33,8 @@ jobs:
           MAJOR_TAG=$(echo $THIS_RELEASE | grep -Eo '^v[0-9]+')
           echo "this release ($THIS_RELEASE) is the latest, updating major tag $MAJOR_TAG"
           
-          git config --global user.email "jbrunton-ci-minion@outlook.com"
-          git config --global user.name "jbrunton-ci-minion"
+          git config --global user.email "john_brunton@live.co.uk"
+          git config --global user.name "John Brunton"
           git tag -fa $MAJOR_TAG -m "Update $MAJOR_TAG tag for release $THIS_RELEASE"
           git push origin $MAJOR_TAG --force
       
