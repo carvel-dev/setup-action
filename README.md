@@ -1,7 +1,3 @@
-# Under Development
-
-Note: this action has not yet been published, but it will be shortly.
-
 # setup-k14s-action
 
 A [Github Action](https://github.com/features/actions) to install k14s apps (such as ytt, kbld, kapp, etc.)
