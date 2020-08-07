@@ -1,4 +1,4 @@
-name: setup-k14s
+name: setup-k14s-action
 description: Install k14s apps
 author: 'John Brunton'
 branding:
