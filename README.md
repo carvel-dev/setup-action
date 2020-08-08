@@ -4,6 +4,9 @@ A [Github Action](https://github.com/features/actions) to install k14s apps (suc
 
 - Slack: [#k14s in Kubernetes slack](https://slack.kubernetes.io)
 
+![build](https://github.com/k14s/setup-k14s-action/workflows/build/badge.svg)
+![release](https://github.com/k14s/setup-k14s-action/workflows/release/badge.svg)
+
 ## Usage
 
 By default, installs latest versions of `ytt`, `kbld`, `kapp`, `kwt`, `imgpkg` and `vendir`:
