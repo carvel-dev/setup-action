@@ -1,11 +1,11 @@
 # setup-k14s-action
 
+[![Build Status](https://github.com/k14s/setup-k14s-action/workflows/build/badge.svg?branch=develop)](https://github.com/k14s/setup-k14s-action/actions?query=branch%3Adevelop+workflow%3Abuild)
+[![Release Status](https://github.com/k14s/setup-k14s-action/workflows/release/badge.svg)](https://github.com/k14s/setup-k14s-action/actions?query=workflow%3Arelease)
+
 A [Github Action](https://github.com/features/actions) to install k14s apps (such as ytt, kbld, kapp, etc.)
 
 - Slack: [#k14s in Kubernetes slack](https://slack.kubernetes.io)
-
-![build](https://github.com/k14s/setup-k14s-action/workflows/build/badge.svg)
-![release](https://github.com/k14s/setup-k14s-action/workflows/release/badge.svg)
 
 ## Usage
 
