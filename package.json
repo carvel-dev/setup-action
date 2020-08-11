@@ -20,7 +20,7 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
-    "@actions/tool-cache": "^1.5.5",
+    "@actions/tool-cache": "^1.6.0",
     "@jbrunton/gha-installer": "^0.4.0",
     "@octokit/rest": "^18.0.3",
     "@octokit/types": "^5.0.1",
