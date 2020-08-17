@@ -24,7 +24,7 @@
     "@jbrunton/gha-installer": "^0.4.0",
     "@octokit/rest": "^18.0.3",
     "@octokit/types": "^5.0.1",
-    "@octokit/webhooks": "^7.6.4",
+    "@octokit/webhooks": "^7.11.0",
     "semver": "^7.3.2"
   },
   "devDependencies": {
