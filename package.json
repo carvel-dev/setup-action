@@ -37,7 +37,7 @@
     "eslint": "^7.6.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^23.20.0",
-    "jest": "^26.1.0",
+    "jest": "^26.4.2",
     "jest-circus": "^26.4.2",
     "jest-mock-extended": "^1.0.9",
     "js-yaml": "^3.14.0",
