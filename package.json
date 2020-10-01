@@ -22,7 +22,7 @@
     "@actions/github": "^4.0.0",
     "@actions/tool-cache": "^1.6.0",
     "@jbrunton/gha-installer": "^0.4.0",
-    "@octokit/rest": "^18.0.5",
+    "@octokit/rest": "^18.0.6",
     "@octokit/types": "^5.4.1",
     "@octokit/webhooks": "^7.11.2",
     "semver": "^7.3.2"
