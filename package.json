@@ -18,7 +18,7 @@
     "verify:output": "node test/e2e/verify_output.js"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@actions/tool-cache": "^1.6.0",
     "@jbrunton/gha-installer": "^0.4.0",
