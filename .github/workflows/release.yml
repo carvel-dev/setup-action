@@ -26,7 +26,7 @@ jobs:
         run: |
           LATEST_RELEASE=$(hub release | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -r | head -n 1)
           echo "latest release: $LATEST_RELEASE"
-          echo ::set-env name=LATEST_RELEASE::$LATEST_RELEASE
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
       - name: update major tag
         if: env.THIS_RELEASE == env.LATEST_RELEASE
         run: |
