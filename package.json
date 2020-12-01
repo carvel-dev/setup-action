@@ -41,7 +41,7 @@
     "jest-circus": "^26.6.1",
     "jest-mock-extended": "^1.0.10",
     "js-yaml": "^3.14.0",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "shelljs": "^0.8.4",
     "ts-jest": "^26.2.0",
     "typescript": "^3.9.7"
