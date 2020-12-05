@@ -25,7 +25,7 @@ export class K14sReleasesService extends GitHubReleasesService {
     fs: FileSystem,
     octokit: Octokit
   ) {
-    super(core, env, octokit, getRepo, getAssetName)
+    super(core, env, octokit, {repo: getRepo, assetName: getAssetName})
     this._fs = fs
   }
 

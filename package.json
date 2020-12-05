@@ -21,7 +21,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@actions/tool-cache": "^1.6.0",
-    "@jbrunton/gha-installer": "^0.4.0",
+    "@jbrunton/gha-installer": "^0.5.4",
     "@octokit/rest": "^18.0.12",
     "@octokit/types": "^5.4.1",
     "@octokit/webhooks": "^7.11.2",
