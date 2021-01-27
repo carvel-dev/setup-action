@@ -1,5 +1,4 @@
 # setup-k14s-action
-
 [![Build Status](https://github.com/k14s/setup-k14s-action/workflows/build/badge.svg?branch=develop)](https://github.com/k14s/setup-k14s-action/actions?query=branch%3Adevelop+workflow%3Abuild)
 [![Release Status](https://github.com/k14s/setup-k14s-action/workflows/release/badge.svg)](https://github.com/k14s/setup-k14s-action/actions?query=workflow%3Arelease)
 
