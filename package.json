@@ -1,7 +1,7 @@
 {
-  "name": "setup-k14s-action",
+  "name": "carvel-setup-action",
   "private": true,
-  "description": "A Github Action to install k14s apps (such as ytt, kbld, kapp, etc.)",
+  "description": "A Github Action to install Carvel apps (such as ytt, kbld, kapp, etc.)",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

@@ -1,6 +1,6 @@
 name: setup-k14s-action
-description: Install k14s apps (ytt, kbld, kapp, etc.)
-author: The K14s Authors
+description: Install Carvel apps (ytt, kbld, kapp, etc.)
+author: The Carvel Authors
 branding:
   color: 'green'
   icon: 'play'
