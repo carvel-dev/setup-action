@@ -3,11 +3,11 @@ import * as github from '@actions/github'
 import {GitHub} from '@actions/github/lib/utils'
 import {Inputs} from './inputs'
 import {Installer, Octokit} from '@jbrunton/gha-installer'
-import {K14sReleasesService} from './k14s_releases_service'
+import {CarvelReleasesService} from './carvel_releases_service'
 
 async function run(): Promise<void> {
   const octokit = createOctokit()
-  const releasesService = K14sReleasesService.create(octokit)
+  const releasesService = CarvelReleasesService.create(octokit)
   const installer = Installer.create(releasesService)
 
   try {

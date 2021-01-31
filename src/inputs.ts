@@ -1,7 +1,7 @@
 import {ActionsCore, Environment} from '@jbrunton/gha-installer/lib/interfaces'
 import {AppInfo} from '@jbrunton/gha-installer'
 
-export const k14sApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir']
+export const carvelApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir']
 
 export class Inputs {
   private _apps?: AppInfo[]
@@ -22,7 +22,7 @@ export class Inputs {
     }
 
     this._apps = apps.map((appName: string) => {
-      if (!k14sApps.includes(appName)) {
+      if (!carvelApps.includes(appName)) {
         throw Error(`Unknown app: ${appName}`)
       }
       return {name: appName, version: this._core.getInput(appName)}
@@ -34,9 +34,9 @@ export class Inputs {
   private getAllApps(): string[] {
     if (this._env.platform == 'win32') {
       // kwt isn't available for Windows
-      return k14sApps.filter(app => app != 'kwt')
+      return carvelApps.filter(app => app != 'kwt')
     }
-    return k14sApps
+    return carvelApps
   }
 
   private parseAppsList(): string[] {

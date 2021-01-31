@@ -2617,89 +2617,6 @@ module.exports = require("os");
 
 /***/ }),
 
-/***/ 101:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAssetName = exports.getRepo = exports.K14sReleasesService = void 0;
-const gha_installer_1 = __webpack_require__(293);
-const crypto = __importStar(__webpack_require__(417));
-const path = __importStar(__webpack_require__(622));
-const fs = __importStar(__webpack_require__(747));
-const core = __importStar(__webpack_require__(470));
-class K14sReleasesService extends gha_installer_1.GitHubReleasesService {
-    constructor(core, env, fs, octokit) {
-        super(core, env, octokit, { repo: getRepo, assetName: getAssetName });
-        this._fs = fs;
-    }
-    onFileDownloaded(path, info, core) {
-        this.verifyChecksum(path, info, core);
-    }
-    verifyChecksum(downloadPath, info, core) {
-        const digest = this.computeDigest(downloadPath);
-        const assetName = path.basename(info.url);
-        const expectedChecksum = `${digest}  ./${assetName}`;
-        const releaseNotes = info.meta.release.body;
-        if (releaseNotes.includes(expectedChecksum)) {
-            core.info(`✅  Verified checksum: "${expectedChecksum}"`);
-        }
-        else {
-            throw new Error(`Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`);
-        }
-    }
-    computeDigest(downloadPath) {
-        const data = this._fs.readFileSync(downloadPath);
-        const digest = crypto.createHash('sha256').update(data).digest('hex');
-        return digest;
-    }
-    static create(octokit) {
-        return new K14sReleasesService(core, process, fs, octokit);
-    }
-}
-exports.K14sReleasesService = K14sReleasesService;
-function getRepo(app) {
-    return { owner: 'k14s', repo: app.name };
-}
-exports.getRepo = getRepo;
-function getAssetName(platform, app) {
-    return `${app.name}-${getAssetSuffix(platform)}`;
-}
-exports.getAssetName = getAssetName;
-function getAssetSuffix(platform) {
-    switch (platform) {
-        case 'win32':
-            return 'windows-amd64.exe';
-        case 'darwin':
-            return 'darwin-amd64';
-        default:
-            return 'linux-amd64';
-    }
-}
-
-
-/***/ }),
-
 /***/ 102:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
@@ -4152,11 +4069,11 @@ const github = __importStar(__webpack_require__(469));
 const utils_1 = __webpack_require__(521);
 const inputs_1 = __webpack_require__(854);
 const gha_installer_1 = __webpack_require__(293);
-const k14s_releases_service_1 = __webpack_require__(101);
+const carvel_releases_service_1 = __webpack_require__(545);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = createOctokit();
-        const releasesService = k14s_releases_service_1.K14sReleasesService.create(octokit);
+        const releasesService = carvel_releases_service_1.CarvelReleasesService.create(octokit);
         const installer = gha_installer_1.Installer.create(releasesService);
         try {
             console.time('download apps');
@@ -9118,6 +9035,89 @@ class HttpClient {
     }
 }
 exports.HttpClient = HttpClient;
+
+
+/***/ }),
+
+/***/ 545:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAssetName = exports.getRepo = exports.CarvelReleasesService = void 0;
+const gha_installer_1 = __webpack_require__(293);
+const crypto = __importStar(__webpack_require__(417));
+const path = __importStar(__webpack_require__(622));
+const fs = __importStar(__webpack_require__(747));
+const core = __importStar(__webpack_require__(470));
+class CarvelReleasesService extends gha_installer_1.GitHubReleasesService {
+    constructor(core, env, fs, octokit) {
+        super(core, env, octokit, { repo: getRepo, assetName: getAssetName });
+        this._fs = fs;
+    }
+    onFileDownloaded(path, info, core) {
+        this.verifyChecksum(path, info, core);
+    }
+    verifyChecksum(downloadPath, info, core) {
+        const digest = this.computeDigest(downloadPath);
+        const assetName = path.basename(info.url);
+        const expectedChecksum = `${digest}  ./${assetName}`;
+        const releaseNotes = info.meta.release.body;
+        if (releaseNotes.includes(expectedChecksum)) {
+            core.info(`✅  Verified checksum: "${expectedChecksum}"`);
+        }
+        else {
+            throw new Error(`Unable to verify checksum for ${assetName}. Expected to find "${expectedChecksum}" in release notes.`);
+        }
+    }
+    computeDigest(downloadPath) {
+        const data = this._fs.readFileSync(downloadPath);
+        const digest = crypto.createHash('sha256').update(data).digest('hex');
+        return digest;
+    }
+    static create(octokit) {
+        return new CarvelReleasesService(core, process, fs, octokit);
+    }
+}
+exports.CarvelReleasesService = CarvelReleasesService;
+function getRepo(app) {
+    return { owner: 'vmware-tanzu', repo: app.name };
+}
+exports.getRepo = getRepo;
+function getAssetName(platform, app) {
+    return `${app.name}-${getAssetSuffix(platform)}`;
+}
+exports.getAssetName = getAssetName;
+function getAssetSuffix(platform) {
+    switch (platform) {
+        case 'win32':
+            return 'windows-amd64.exe';
+        case 'darwin':
+            return 'darwin-amd64';
+        default:
+            return 'linux-amd64';
+    }
+}
 
 
 /***/ }),
@@ -14290,8 +14290,8 @@ exports.restEndpointMethods = restEndpointMethods;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Inputs = exports.k14sApps = void 0;
-exports.k14sApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir'];
+exports.Inputs = exports.carvelApps = void 0;
+exports.carvelApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir'];
 class Inputs {
     constructor(core, env) {
         this._core = core;
@@ -14304,7 +14304,7 @@ class Inputs {
             apps.push(...this.getAllApps());
         }
         this._apps = apps.map((appName) => {
-            if (!exports.k14sApps.includes(appName)) {
+            if (!exports.carvelApps.includes(appName)) {
                 throw Error(`Unknown app: ${appName}`);
             }
             return { name: appName, version: this._core.getInput(appName) };
@@ -14314,9 +14314,9 @@ class Inputs {
     getAllApps() {
         if (this._env.platform == 'win32') {
             // kwt isn't available for Windows
-            return exports.k14sApps.filter(app => app != 'kwt');
+            return exports.carvelApps.filter(app => app != 'kwt');
         }
-        return exports.k14sApps;
+        return exports.carvelApps;
     }
     parseAppsList() {
         return this._core

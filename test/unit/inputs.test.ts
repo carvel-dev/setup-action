@@ -1,4 +1,4 @@
-import { Inputs, k14sApps } from '../../src/inputs'
+import { Inputs, carvelApps } from '../../src/inputs'
 import { mock } from 'jest-mock-extended';
 import { ActionsCore } from '@jbrunton/gha-installer/lib/interfaces';
 
@@ -6,7 +6,7 @@ describe('Inputs', () => {
   function createInputs(platform: string, inputs: {[key: string]: string} = {}): Inputs {
     const core = mock<ActionsCore>()
     core.getInput.calledWith('only').mockReturnValue(inputs.only || '')
-    for (let appName of k14sApps) {
+    for (let appName of carvelApps) {
       core.getInput.calledWith(appName).mockReturnValue(inputs[appName] || 'latest')
     }
     return new Inputs(core, { platform: platform })
