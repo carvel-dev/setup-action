@@ -1,4 +1,4 @@
-name: setup-k14s-action
+name: carvel-setup-action
 description: Install Carvel apps (ytt, kbld, kapp, etc.)
 author: The Carvel Authors
 branding:
