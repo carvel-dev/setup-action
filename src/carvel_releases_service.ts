@@ -16,7 +16,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as core from '@actions/core'
 
-export class K14sReleasesService extends GitHubReleasesService {
+export class CarvelReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
 
   constructor(
@@ -61,13 +61,13 @@ export class K14sReleasesService extends GitHubReleasesService {
     return digest
   }
 
-  static create(octokit: Octokit): K14sReleasesService {
-    return new K14sReleasesService(core, process, fs, octokit)
+  static create(octokit: Octokit): CarvelReleasesService {
+    return new CarvelReleasesService(core, process, fs, octokit)
   }
 }
 
 export function getRepo(app: AppInfo): ReposListReleasesParameters {
-  return {owner: 'k14s', repo: app.name}
+  return {owner: 'vmware-tanzu', repo: app.name}
 }
 
 export function getAssetName(platform: string, app: AppInfo): string {

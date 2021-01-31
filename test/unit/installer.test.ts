@@ -2,7 +2,7 @@ import { mock, MockProxy } from 'jest-mock-extended'
 import { Installer, DownloadService, GitHubDownloadMeta } from '@jbrunton/gha-installer'
 import { ActionsCore, ActionsToolCache, FileSystem } from '@jbrunton/gha-installer/lib/interfaces'
 import { ReposListReleasesItem } from '@jbrunton/gha-installer/lib/octokit'
-import { K14sReleasesService } from '../../src/k14s_releases_service'
+import { CarvelReleasesService } from '../../src/carvel_releases_service'
 import { TestOctokit, createTestOctokit } from '../fixtures/test_octokit'
 
 const assetNames = {
@@ -10,8 +10,8 @@ const assetNames = {
   win32: "ytt-windows-amd64.exe"
 }
 const downloadUrls = {
-  linux: "https://example.com/k14s/ytt/releases/download/0.28.0/ytt-linux-amd64",
-  win32: "https://example.com/k14s/ytt/releases/download/0.28.0/ytt-windows-amd64.exe"
+  linux: "https://example.com/vmware-tanzu/ytt/releases/download/0.28.0/ytt-linux-amd64",
+  win32: "https://example.com/vmware-tanzu/ytt/releases/download/0.28.0/ytt-windows-amd64.exe"
 }
 const downloadPaths = {
   linux: "/downloads/ytt-linux-amd64",
@@ -38,7 +38,7 @@ describe('Installer', () => {
     cache = mock<ActionsToolCache>()
     fs = mock<FileSystem>()   
     octokit = createTestOctokit()
-    octokit.stubListReleasesResponse({ owner: 'k14s', repo: 'ytt' }, [
+    octokit.stubListReleasesResponse({ owner: 'vmware-tanzu', repo: 'ytt' }, [
       releaseJsonFor('ytt', '0.10.1'), // a more recent security patch
       releaseJsonFor('ytt', '0.28.0'), // the latest version by semver number
       releaseJsonFor('ytt', '0.27.0')
@@ -65,10 +65,10 @@ describe('Installer', () => {
     return {
       tag_name: version,
       assets: [{
-        browser_download_url: `https://example.com/k14s/${app}/releases/download/${version}/${app}-linux-amd64`,
+        browser_download_url: `https://example.com/vmware-tanzu/${app}/releases/download/${version}/${app}-linux-amd64`,
         name: `${app}-linux-amd64`
       }, {
-        browser_download_url: `https://example.com/k14s/${app}/releases/download/${version}/${app}-windows-amd64.exe`,
+        browser_download_url: `https://example.com/vmware-tanzu/${app}/releases/download/${version}/${app}-windows-amd64.exe`,
         name: `${app}-windows-amd64.exe`
       }],
       body: `* some cool new features\n${expectedChecksums.linux}\n${expectedChecksums.win32}`
@@ -77,7 +77,7 @@ describe('Installer', () => {
 
   function createInstaller(platform: "win32" | "linux"): Installer<GitHubDownloadMeta> {
     const env = { platform: platform }
-    const releasesService = new K14sReleasesService(core, env, fs, octokit)
+    const releasesService = new CarvelReleasesService(core, env, fs, octokit)
     const installer = new Installer(core, cache, fs, env, releasesService)
     return installer
   }
@@ -89,7 +89,7 @@ describe('Installer', () => {
 
     await installer.installApp({ name: 'ytt', version: 'latest' })
 
-    expect(core.info).toHaveBeenCalledWith("Downloading ytt 0.28.0 from https://example.com/k14s/ytt/releases/download/0.28.0/ytt-linux-amd64")
+    expect(core.info).toHaveBeenCalledWith("Downloading ytt 0.28.0 from https://example.com/vmware-tanzu/ytt/releases/download/0.28.0/ytt-linux-amd64")
     expect(core.info).toHaveBeenCalledWith(`✅  Verified checksum: "dbd318c1c462aee872f41109a4dfd3048871a03dedd0fe0e757ced57dad6f2d7  ./ytt-linux-amd64"`)
     expect(fs.chmodSync).toHaveBeenCalledWith(downloadPaths.linux, "755")
     expect(core.addPath).toHaveBeenCalledWith(binPaths.linux)
@@ -102,7 +102,7 @@ describe('Installer', () => {
 
     await installer.installApp({ name: 'ytt', version: '0.28.0' })
 
-    expect(core.info).toHaveBeenCalledWith("Downloading ytt 0.28.0 from https://example.com/k14s/ytt/releases/download/0.28.0/ytt-windows-amd64.exe")
+    expect(core.info).toHaveBeenCalledWith("Downloading ytt 0.28.0 from https://example.com/vmware-tanzu/ytt/releases/download/0.28.0/ytt-windows-amd64.exe")
     expect(core.info).toHaveBeenCalledWith(`✅  Verified checksum: "dbd318c1c462aee872f41109a4dfd3048871a03dedd0fe0e757ced57dad6f2d7  ./ytt-windows-amd64.exe"`)
     expect(fs.chmodSync).toHaveBeenCalledWith(downloadPaths.win32, "755")
     expect(core.addPath).toHaveBeenCalledWith(binPaths.win32)
