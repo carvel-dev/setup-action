@@ -15147,7 +15147,7 @@ class Inputs {
         this._env = env;
     }
     getAppsToDownload() {
-        const apps = this.parseAppsList();
+        const apps = this.includeAppsList();
         if (apps.length == 0) {
             // if no options specified, download all
             apps.push(...this.getAllApps());
@@ -15167,9 +15167,18 @@ class Inputs {
         }
         return exports.carvelApps;
     }
-    parseAppsList() {
+    includeAppsList() {
+        const apps = this.parseAppList('only');
+        if (apps.length == 0) {
+            // if no `only` option specified, include all by default
+            apps.push(...this.getAllApps());
+        }
+        const excludeApps = this.parseAppList('exclude');
+        return apps.filter(appName => !excludeApps.includes(appName));
+    }
+    parseAppList(input) {
         return this._core
-            .getInput('only')
+            .getInput(input)
             .split(',')
             .map((appName) => appName.trim())
             .filter((appName) => appName != '');

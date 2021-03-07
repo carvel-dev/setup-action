@@ -13,6 +13,10 @@ inputs:
     description: List apps to download if you don't need all
     required: false
     default: ""
+  exclude:
+    description: List apps to exclude if you want most but not all
+    required: false
+    default: ""
   ytt:
     description: ytt version
     required: false

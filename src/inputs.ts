@@ -14,7 +14,7 @@ export class Inputs {
   }
 
   public getAppsToDownload(): AppInfo[] {
-    const apps = this.parseAppsList()
+    const apps = this.includeAppsList()
 
     if (apps.length == 0) {
       // if no options specified, download all
@@ -39,9 +39,22 @@ export class Inputs {
     return carvelApps
   }
 
-  private parseAppsList(): string[] {
+  private includeAppsList(): string[] {
+    const apps = this.parseAppList('only')
+
+    if (apps.length == 0) {
+      // if no `only` option specified, include all by default
+      apps.push(...this.getAllApps())
+    }
+
+    const excludeApps = this.parseAppList('exclude')
+
+    return apps.filter(appName => !excludeApps.includes(appName))
+  }
+
+  private parseAppList(input: string): string[] {
     return this._core
-      .getInput('only')
+      .getInput(input)
       .split(',')
       .map((appName: string) => appName.trim())
       .filter((appName: string) => appName != '')
