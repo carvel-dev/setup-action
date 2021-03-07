@@ -6,6 +6,7 @@ describe('Inputs', () => {
   function createInputs(platform: string, inputs: {[key: string]: string} = {}): Inputs {
     const core = mock<ActionsCore>()
     core.getInput.calledWith('only').mockReturnValue(inputs.only || '')
+    core.getInput.calledWith('exclude').mockReturnValue(inputs.exclude || '')
     for (let appName of carvelApps) {
       core.getInput.calledWith(appName).mockReturnValue(inputs[appName] || 'latest')
     }
@@ -57,6 +58,17 @@ describe('Inputs', () => {
       ])
     })
 
+    test('limits apps to "only" list', () => {
+      const inputs = createInputs("linux", { only: "ytt, kbld" })
+    
+      const apps = inputs.getAppsToDownload()
+    
+      expect(apps).toEqual([
+        { name: "ytt", "version": "latest" },
+        { name: "kbld", "version": "latest" }
+      ])
+    })
+
     test('allows for app list override', () => {
       const inputs = createInputs("linux", { only: "ytt, kbld", ytt: "0.28.0" })
     
@@ -65,6 +77,19 @@ describe('Inputs', () => {
       expect(apps).toEqual([
         { name: "ytt", "version": "0.28.0" },
         { name: "kbld", "version": "latest" }
+      ])
+    })
+
+    test('excludes apps from "exclude" list', () => {
+      const inputs = createInputs("linux", { exclude: "ytt, kwt", kapp: "0.34.0" })
+    
+      const apps = inputs.getAppsToDownload()
+    
+      expect(apps).toEqual([
+        { name: "kbld", "version": "latest" },
+        { name: "kapp", "version": "0.34.0" },
+        { name: "imgpkg", "version": "latest" },
+        { name: "vendir", "version": "latest" }
       ])
     })
 

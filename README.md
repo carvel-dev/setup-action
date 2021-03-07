@@ -43,6 +43,18 @@ steps:
     kbld version
 ```
 
+To exclude specific apps:
+
+```yaml
+steps:
+- uses: vmware-tanzu/carvel-setup-action@v1
+  with:
+    exclude: kwt, vendir
+- run: |
+    ytt version
+    kbld version
+```
+
 To use a specific version of an app:
 
 ```yaml
