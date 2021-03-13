@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - run: npm install
     - run: npm run all
     - name: check build up to date
@@ -23,8 +23,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: "${{ matrix.os }}"
+    defaults:
+      run:
+        working-directory: carvel-setup-action
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        path: carvel-setup-action
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
@@ -41,8 +46,13 @@ jobs:
 
   test-e2e-specific-apps:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: carvel-setup-action
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        path: carvel-setup-action
     - uses: ./
       with:
         only: ytt, kbld
@@ -55,8 +65,13 @@ jobs:
 
   test-e2e-exclude-apps:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: carvel-setup-action
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        path: carvel-setup-action
     - uses: ./
       with:
         exclude: kwt, vendir
@@ -69,8 +84,13 @@ jobs:
 
   test-e2e-specific-version:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: carvel-setup-action
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        path: carvel-setup-action
     - uses: ./
       with:
         only: ytt
@@ -82,8 +102,13 @@ jobs:
 
   test-e2e-no-token:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: carvel-setup-action
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        path: carvel-setup-action
     - uses: ./
       with:
         only: ytt
