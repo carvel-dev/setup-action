@@ -3986,7 +3986,7 @@ class GitHubReleasesService {
             const assetName = typeof this._opts.assetName == 'string'
                 ? this._opts.assetName
                 : this._opts.assetName(this._env.platform, app);
-            const response = yield this._octokit.repos.listReleases(repo);
+            const response = (yield this._octokit.repos.listReleases(repo));
             const releases = response.data;
             if (app.version == 'latest') {
                 const release = this.sortReleases(releases)[0];
@@ -9160,7 +9160,7 @@ class CarvelReleasesService extends gha_installer_1.GitHubReleasesService {
         const assetName = path.basename(info.url);
         const expectedChecksum = `${digest}  ./${assetName}`;
         const releaseNotes = info.meta.release.body;
-        if (releaseNotes.includes(expectedChecksum)) {
+        if (releaseNotes && releaseNotes.includes(expectedChecksum)) {
             core.info(`✅  Verified checksum: "${expectedChecksum}"`);
         }
         else {

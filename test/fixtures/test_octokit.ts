@@ -19,5 +19,5 @@ function stubListReleasesResponse(this: TestOctokit, params: ReposListReleasesPa
   const response = { data: releases } as OctokitResponse<ReposListReleasesResponseData>
   this.repos.listReleases
     .calledWith(isEqual(params))
-    .mockReturnValue(Promise.resolve(response))
+    .mockReturnValue(Promise.resolve(response as any))
 }
