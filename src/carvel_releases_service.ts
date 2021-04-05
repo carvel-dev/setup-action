@@ -46,7 +46,7 @@ export class CarvelReleasesService extends GitHubReleasesService {
     const assetName = path.basename(info.url)
     const expectedChecksum = `${digest}  ./${assetName}`
     const releaseNotes = info.meta.release.body
-    if (releaseNotes.includes(expectedChecksum)) {
+    if (releaseNotes && releaseNotes.includes(expectedChecksum)) {
       core.info(`✅  Verified checksum: "${expectedChecksum}"`)
     } else {
       throw new Error(
