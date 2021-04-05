@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: npm install
+    - run: npm ci
     - run: npm run all
     - name: check build up to date
       run: git diff --exit-code --stat HEAD
@@ -28,7 +28,7 @@ jobs:
     - uses: ./
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm install
+    - run: npm ci
     - name: check all apps installed
       if: matrix.os != 'windows-latest'
       run: npm run verify:installed ytt kbld kapp kwt imgpkg vendir
@@ -47,7 +47,7 @@ jobs:
       with:
         only: ytt, kbld
         token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm install
+    - run: npm ci
     - name: check specific apps are installs
       run: |
         npm run verify:installed ytt kbld
@@ -61,7 +61,7 @@ jobs:
       with:
         exclude: kwt, vendir
         token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm install
+    - run: npm ci
     - name: check specific apps are installed
       run: |
         npm run verify:installed ytt kbld kapp imgpkg
@@ -76,7 +76,7 @@ jobs:
         only: ytt
         ytt: v0.27.0
         token: ${{ secrets.GITHUB_TOKEN }}
-    - run: npm install
+    - run: npm ci
     - name: check specific version is installed
       run: npm run verify:output "ytt version" "ytt version 0.27.0"
 
@@ -87,6 +87,6 @@ jobs:
     - uses: ./
       with:
         only: ytt
-    - run: npm install
+    - run: npm ci
     - name: verify app installed without a token
       run: npm run verify:installed ytt
