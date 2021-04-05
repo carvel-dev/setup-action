@@ -9,7 +9,6 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "pack": "ncc build",
-    "prepare": "npm run format && npm run build && npm run pack",
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run pack && npm test",
     "verify:installed": "node test/e2e/verify_installed.js",

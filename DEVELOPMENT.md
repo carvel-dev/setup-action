@@ -33,7 +33,7 @@ Before submitting a PR, you need to:
 1. Format your code.
 2. Update `dist/index.js`.
 
-You can do this with `npm run prepare`.
+You can do this with `npm run all`.
 
 If you forget, the `check build up to date` build step will fail.
 
