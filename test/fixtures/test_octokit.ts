@@ -10,14 +10,14 @@ interface TestMethods {
 export type TestOctokit = MockProxy<Octokit> & TestMethods
 
 export function createTestOctokit(): TestOctokit {
-  const octokit = mockDeep<Octokit>()
+  const octokit: any = mockDeep<Octokit>()
   octokit.stubListReleasesResponse = stubListReleasesResponse
   return octokit as TestOctokit
 }
 
 function stubListReleasesResponse(this: TestOctokit, params: ReposListReleasesParameters, releases: Array<ReposListReleasesItem>) {
   const response = { data: releases } as OctokitResponse<ReposListReleasesResponseData>
-  this.repos.listReleases
+  this.rest.repos.listReleases
     .calledWith(isEqual(params))
     .mockReturnValue(Promise.resolve(response as any))
 }
