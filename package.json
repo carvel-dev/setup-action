@@ -22,7 +22,7 @@
     "@jbrunton/gha-installer": "^0.5.6"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.1",
     "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^3.10.1",
