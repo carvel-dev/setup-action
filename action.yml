@@ -1,5 +1,5 @@
 name: carvel-setup-action
-description: Install Carvel apps (ytt, kbld, kapp, etc.)
+description: Install Carvel apps (ytt, kbld, kapp, kwt, imgpkg and vendir)
 author: The Carvel Authors
 branding:
   color: 'green'
