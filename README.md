@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/vmware-tanzu/carvel-setup-action/workflows/build/badge.svg?branch=develop)](https://github.com/vmware-tanzu/carvel-setup-action/actions?query=branch%3Adevelop+workflow%3Abuild)
 [![Release Status](https://github.com/vmware-tanzu/carvel-setup-action/workflows/release/badge.svg)](https://github.com/vmware-tanzu/carvel-setup-action/actions?query=workflow%3Arelease)
 
-A [Github Action](https://github.com/features/actions) to install Carvel apps (such as ytt, kbld, kapp, etc.)
+A [Github Action](https://github.com/features/actions) to install Carvel apps (ytt, kbld, kapp, kwt, imgpkg and vendir).
 
 - Slack: [#carvel in Kubernetes slack](https://slack.kubernetes.io)
 
