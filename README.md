@@ -19,7 +19,7 @@ steps:
     kbld version
 ```
 
-`carvel-setup-action` uses the GitHub API to find information about latest releases. To avoid [rate limits](https://developer.github.com/v3/#rate-limiting) it is recommended you pass a [token](https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token):
+`carvel-setup-action` uses the GitHub API to find information about latest releases. To avoid [rate limits](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting) it is recommended you pass a [token](https://help.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token):
 
 ```yaml
 steps:
