@@ -4578,7 +4578,7 @@ class GitHubReleasesService {
     getDownloadInfoForAsset(app, assetName, release) {
         for (const candidate of release.assets) {
             if (candidate.name == assetName) {
-                this._core.debug(`Found executable ${assetName} for ${app_info_1.describeApp(app)}`);
+                this._core.debug(`Found executable ${assetName} for ${(0, app_info_1.describeApp)(app)}`);
                 return {
                     version: release.tag_name,
                     url: candidate.browser_download_url,
@@ -4586,7 +4586,7 @@ class GitHubReleasesService {
                 };
             }
         }
-        throw new Error(`Could not find executable ${assetName} for ${app_info_1.describeApp(app)}`);
+        throw new Error(`Could not find executable ${assetName} for ${(0, app_info_1.describeApp)(app)}`);
     }
     sortReleases(releases) {
         return releases
@@ -14453,14 +14453,16 @@ function bytesToUuid(buf, offset) {
   var i = offset || 0;
   var bth = byteToHex;
   // join used to fix memory issue caused by concatenation: https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4
-  return ([bth[buf[i++]], bth[buf[i++]], 
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]], '-',
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]],
-	bth[buf[i++]], bth[buf[i++]]]).join('');
+  return ([
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]], '-',
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]],
+    bth[buf[i++]], bth[buf[i++]]
+  ]).join('');
 }
 
 module.exports = bytesToUuid;
