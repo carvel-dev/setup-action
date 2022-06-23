@@ -41,6 +41,10 @@ inputs:
     description: vendir version
     required: false
     default: latest
+  kctrl:
+    description: kctrl version
+    required: false
+    default: latest
 runs:
   using: 'node12'
   main: 'dist/index.js'

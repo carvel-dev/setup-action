@@ -25,7 +25,8 @@ describe('Inputs', () => {
         { name: "kapp", "version": "latest" },
         { name: "kwt", "version": "latest" },
         { name: "imgpkg", "version": "latest" },
-        { name: "vendir", "version": "latest" }
+        { name: "vendir", "version": "latest" },
+        { name: "kctrl", "version": "latest" }
       ])
     })
 
@@ -39,7 +40,8 @@ describe('Inputs', () => {
         { name: "kbld", "version": "latest" },
         { name: "kapp", "version": "latest" },
         { name: "imgpkg", "version": "latest" },
-        { name: "vendir", "version": "latest" }
+        { name: "vendir", "version": "latest" },
+        { name: "kctrl", "version": "latest" },
       ])
     })
 
@@ -54,7 +56,8 @@ describe('Inputs', () => {
         { name: "kapp", "version": "latest" },
         { name: "kwt", "version": "latest" },
         { name: "imgpkg", "version": "latest" },
-        { name: "vendir", "version": "latest" }
+        { name: "vendir", "version": "latest" },
+        { name: "kctrl", "version": "latest" }
       ])
     })
 
@@ -89,7 +92,8 @@ describe('Inputs', () => {
         { name: "kbld", "version": "latest" },
         { name: "kapp", "version": "0.34.0" },
         { name: "imgpkg", "version": "latest" },
-        { name: "vendir", "version": "latest" }
+        { name: "vendir", "version": "latest" },
+        { name: "kctrl", "version": "latest" }
       ])
     })
 
