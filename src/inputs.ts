@@ -1,7 +1,15 @@
 import {ActionsCore, Environment} from '@jbrunton/gha-installer/lib/interfaces'
 import {AppInfo} from '@jbrunton/gha-installer'
 
-export const carvelApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir']
+export const carvelApps = [
+  'ytt',
+  'kbld',
+  'kapp',
+  'kwt',
+  'imgpkg',
+  'vendir',
+  'kctrl'
+]
 
 export class Inputs {
   private _apps?: AppInfo[]

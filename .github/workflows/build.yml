@@ -31,10 +31,10 @@ jobs:
     - run: npm ci
     - name: check all apps installed
       if: matrix.os != 'windows-latest'
-      run: npm run verify:installed ytt kbld kapp kwt imgpkg vendir
+      run: npm run verify:installed ytt kbld kapp kwt imgpkg vendir kctrl
     - name: check all apps installed (windows)
       if: matrix.os == 'windows-latest'
-      run: npm run verify:installed ytt kbld kapp imgpkg vendir
+      run: npm run verify:installed ytt kbld kapp imgpkg vendir kctrl
     - name: check apps are usable
       run: |
         npm run verify:output "ytt -f ./test/e2e/ytt-example" "greeting: Hello, World"
@@ -51,7 +51,7 @@ jobs:
     - name: check specific apps are installs
       run: |
         npm run verify:installed ytt kbld
-        npm run verify:not:installed kapp kwt imgpkg vendir
+        npm run verify:not:installed kapp kwt imgpkg vendir kctrl
 
   test-e2e-exclude-apps:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
     - run: npm ci
     - name: check specific apps are installed
       run: |
-        npm run verify:installed ytt kbld kapp imgpkg
+        npm run verify:installed ytt kbld kapp imgpkg kctrl
         npm run verify:not:installed kwt vendir
 
   test-e2e-specific-version:

@@ -67,7 +67,17 @@ export class CarvelReleasesService extends GitHubReleasesService {
 }
 
 export function getRepo(app: AppInfo): ReposListReleasesParameters {
-  return {owner: 'vmware-tanzu', repo: `carvel-${app.name}`}
+  return {
+    owner: 'vmware-tanzu',
+    repo: getRepoName(app)
+  }
+}
+
+function getRepoName(app: AppInfo): string {
+  if (app.name === 'kctrl') {
+    return 'carvel-kapp-controller'
+  }
+  return `carvel-${app.name}`
 }
 
 export function getAssetName(platform: string, app: AppInfo): string {

@@ -9219,9 +9219,18 @@ class CarvelReleasesService extends gha_installer_1.GitHubReleasesService {
 }
 exports.CarvelReleasesService = CarvelReleasesService;
 function getRepo(app) {
-    return { owner: 'vmware-tanzu', repo: `carvel-${app.name}` };
+    return {
+        owner: 'vmware-tanzu',
+        repo: getRepoName(app)
+    };
 }
 exports.getRepo = getRepo;
+function getRepoName(app) {
+    if (app.name === 'kctrl') {
+        return 'carvel-kapp-controller';
+    }
+    return `carvel-${app.name}`;
+}
 function getAssetName(platform, app) {
     return `${app.name}-${getAssetSuffix(platform)}`;
 }
@@ -14506,7 +14515,15 @@ exports.restEndpointMethods = restEndpointMethods;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Inputs = exports.carvelApps = void 0;
-exports.carvelApps = ['ytt', 'kbld', 'kapp', 'kwt', 'imgpkg', 'vendir'];
+exports.carvelApps = [
+    'ytt',
+    'kbld',
+    'kapp',
+    'kwt',
+    'imgpkg',
+    'vendir',
+    'kctrl'
+];
 class Inputs {
     constructor(core, env) {
         this._core = core;
