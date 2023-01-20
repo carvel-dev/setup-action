@@ -1,7 +1,7 @@
 # carvel-setup-action
 
-[![Build Status](https://github.com/vmware-tanzu/carvel-setup-action/workflows/build/badge.svg?branch=develop)](https://github.com/vmware-tanzu/carvel-setup-action/actions?query=branch%3Adevelop+workflow%3Abuild)
-[![Release Status](https://github.com/vmware-tanzu/carvel-setup-action/workflows/release/badge.svg)](https://github.com/vmware-tanzu/carvel-setup-action/actions?query=workflow%3Arelease)
+[![Build Status](https://github.com/carvel-dev/setup-action/workflows/build/badge.svg?branch=develop)](https://github.com/carvel-dev/setup-action/actions?query=branch%3Adevelop+workflow%3Abuild)
+[![Release Status](https://github.com/carvel-dev/setup-action/workflows/release/badge.svg)](https://github.com/carvel-dev/setup-action/actions?query=workflow%3Arelease)
 
 A [Github Action](https://github.com/features/actions) to install [Carvel apps](https://carvel.dev/) (ytt, kbld, kapp, kwt, imgpkg, vendir and kctrl).
 
@@ -13,7 +13,7 @@ By default, installs latest versions of `ytt`, `kbld`, `kapp`, `kwt`, `imgpkg`, 
 
 ```yaml
 steps:
-- uses: vmware-tanzu/carvel-setup-action@v1
+- uses: carvel-dev/setup-action@v1
 - run: |
     ytt version
     kbld version
@@ -23,7 +23,7 @@ steps:
 
 ```yaml
 steps:
-- uses: vmware-tanzu/carvel-setup-action@v1
+- uses: carvel-dev/setup-action@v1
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
 - run: |
@@ -35,7 +35,7 @@ To install only specific apps:
 
 ```yaml
 steps:
-- uses: vmware-tanzu/carvel-setup-action@v1
+- uses: carvel-dev/setup-action@v1
   with:
     only: ytt, kbld
 - run: |
@@ -47,7 +47,7 @@ To exclude specific apps:
 
 ```yaml
 steps:
-- uses: vmware-tanzu/carvel-setup-action@v1
+- uses: carvel-dev/setup-action@v1
   with:
     exclude: kwt, vendir
 - run: |
@@ -59,7 +59,7 @@ To use a specific version of an app:
 
 ```yaml
 steps:
-- uses: vmware-tanzu/carvel-setup-action@v1
+- uses: carvel-dev/setup-action@v1
   with:
     only: ytt, kbld
     kbld: v0.28.0
@@ -70,4 +70,4 @@ steps:
 
 ## Development
 
-See [DEVELOPMENT](https://github.com/vmware-tanzu/carvel-setup-action/blob/develop/DEVELOPMENT.md).
+See [DEVELOPMENT](https://github.com/carvel-dev/setup-action/blob/develop/DEVELOPMENT.md).
