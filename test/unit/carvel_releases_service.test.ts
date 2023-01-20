@@ -15,12 +15,12 @@ describe('CarvelReleasesService', () => {
   describe('getRepo', () => {
     it("returns the name of the repo for the app", () => {
       expect(getRepo(kbldInfo)).toEqual({
-        owner: "vmware-tanzu",
+        owner: "carvel-dev",
         repo: "carvel-kbld"
       })
       // kctrl is a special case
       expect(getRepo(kctrlInfo)).toEqual({
-        owner: "vmware-tanzu",
+        owner: "carvel-dev",
         repo: "carvel-kapp-controller"
       })
     })

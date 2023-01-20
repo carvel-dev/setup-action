@@ -68,7 +68,7 @@ export class CarvelReleasesService extends GitHubReleasesService {
 
 export function getRepo(app: AppInfo): ReposListReleasesParameters {
   return {
-    owner: 'vmware-tanzu',
+    owner: 'carvel-dev',
     repo: getRepoName(app)
   }
 }

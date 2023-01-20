@@ -9614,7 +9614,7 @@ class CarvelReleasesService extends gha_installer_1.GitHubReleasesService {
 exports.CarvelReleasesService = CarvelReleasesService;
 function getRepo(app) {
     return {
-        owner: 'vmware-tanzu',
+        owner: 'carvel-dev',
         repo: getRepoName(app)
     };
 }
