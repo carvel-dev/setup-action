@@ -75,9 +75,9 @@ export function getRepo(app: AppInfo): ReposListReleasesParameters {
 
 function getRepoName(app: AppInfo): string {
   if (app.name === 'kctrl') {
-    return 'carvel-kapp-controller'
+    return 'kapp-controller'
   }
-  return `carvel-${app.name}`
+  return `${app.name}`
 }
 
 export function getAssetName(platform: string, app: AppInfo): string {

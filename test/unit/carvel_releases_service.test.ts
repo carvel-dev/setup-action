@@ -16,12 +16,12 @@ describe('CarvelReleasesService', () => {
     it("returns the name of the repo for the app", () => {
       expect(getRepo(kbldInfo)).toEqual({
         owner: "carvel-dev",
-        repo: "carvel-kbld"
+        repo:  "kbld"
       })
       // kctrl is a special case
       expect(getRepo(kctrlInfo)).toEqual({
         owner: "carvel-dev",
-        repo: "carvel-kapp-controller"
+        repo:  "kapp-controller"
       })
     })
   })

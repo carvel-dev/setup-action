@@ -9621,9 +9621,9 @@ function getRepo(app) {
 exports.getRepo = getRepo;
 function getRepoName(app) {
     if (app.name === 'kctrl') {
-        return 'carvel-kapp-controller';
+        return 'kapp-controller';
     }
-    return `carvel-${app.name}`;
+    return `${app.name}`;
 }
 function getAssetName(platform, app) {
     return `${app.name}-${getAssetSuffix(platform)}`;
