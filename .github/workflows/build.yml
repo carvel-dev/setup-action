@@ -74,11 +74,11 @@ jobs:
     - uses: ./
       with:
         only: ytt
-        ytt: v0.27.0
+        ytt: v0.43.4
         token: ${{ secrets.GITHUB_TOKEN }}
     - run: npm ci
     - name: check specific version is installed
-      run: npm run verify:output "ytt version" "ytt version 0.27.0"
+      run: npm run verify:output "ytt version" "ytt version 0.43.4"
 
   test-e2e-no-token:
     runs-on: ubuntu-latest
