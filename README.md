@@ -13,7 +13,7 @@ By default, installs latest versions of `ytt`, `kbld`, `kapp`, `kwt`, `imgpkg`, 
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v1
+- uses: carvel-dev/setup-action@v2
 - run: |
     ytt version
     kbld version
@@ -23,7 +23,7 @@ steps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v1
+- uses: carvel-dev/setup-action@v2
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
 - run: |
@@ -35,7 +35,7 @@ To install only specific apps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v1
+- uses: carvel-dev/setup-action@v2
   with:
     only: ytt, kbld
 - run: |
@@ -47,7 +47,7 @@ To exclude specific apps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v1
+- uses: carvel-dev/setup-action@v2
   with:
     exclude: kwt, vendir
 - run: |
@@ -59,7 +59,7 @@ To use a specific version of an app:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v1
+- uses: carvel-dev/setup-action@v2
   with:
     only: ytt, kbld
     kbld: v0.28.0
@@ -67,6 +67,10 @@ steps:
     ytt version
     kbld version
 ```
+
+## Node version support
+
+Version `v2` requires a Node 20 runner. If you're using older self-hosted runners, you can still use `v1` for Node 16 support.
 
 ## Development
 
