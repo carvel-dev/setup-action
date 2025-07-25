@@ -29,6 +29,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getAssetName = exports.getRepo = exports.CarvelReleasesService = void 0;
 const gha_installer_1 = __nccwpck_require__(631);
@@ -36,6 +39,7 @@ const crypto = __importStar(__nccwpck_require__(6113));
 const path = __importStar(__nccwpck_require__(1017));
 const fs = __importStar(__nccwpck_require__(7147));
 const core = __importStar(__nccwpck_require__(2186));
+const os_1 = __importDefault(__nccwpck_require__(2037));
 class CarvelReleasesService extends gha_installer_1.GitHubReleasesService {
     constructor(core, env, fs, octokit) {
         super(core, env, octokit, { repo: getRepo, assetName: getAssetName });
@@ -84,13 +88,18 @@ function getAssetName(platform, app) {
 }
 exports.getAssetName = getAssetName;
 function getAssetSuffix(platform) {
-    switch (platform) {
-        case 'win32':
+    const arch = os_1.default.arch();
+    switch (`${platform}-${arch}`) {
+        case 'win32-x64':
             return 'windows-amd64.exe';
-        case 'darwin':
+        case 'darwin-x64':
             return 'darwin-amd64';
-        default:
+        case 'linux-x64':
             return 'linux-amd64';
+        case 'linux-arm64':
+            return 'linux-arm64';
+        default:
+            throw new Error(`Unsupported platform-arch combination: ${platform}-${arch}`);
     }
 }
 

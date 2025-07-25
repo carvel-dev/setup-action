@@ -15,6 +15,7 @@ import * as crypto from 'crypto'
 import * as path from 'path'
 import * as fs from 'fs'
 import * as core from '@actions/core'
+import os from 'os';
 
 export class CarvelReleasesService extends GitHubReleasesService {
   private _fs: FileSystem
@@ -85,12 +86,17 @@ export function getAssetName(platform: string, app: AppInfo): string {
 }
 
 function getAssetSuffix(platform: string): string {
-  switch (platform) {
-    case 'win32':
+  const arch = os.arch()
+  switch (`${platform}-${arch}`) {
+    case 'win32-x64':
       return 'windows-amd64.exe'
-    case 'darwin':
+    case 'darwin-x64':
       return 'darwin-amd64'
-    default:
+    case 'linux-x64':
       return 'linux-amd64'
+    case 'linux-arm64':
+      return 'linux-arm64'
+    default:
+      throw new Error(`Unsupported platform-arch combination: ${platform}-${arch}`)
   }
 }
