@@ -70,7 +70,7 @@ steps:
 
 ## Node version support
 
-Version `v2` requires a Node 20 runner. If you're using older self-hosted runners, you can still use `v1` for Node 16 support.
+Version `v3` requires a Node 24 runner. If you're using older self-hosted runners, you can still use `v2` for Node 20 support or `v1` for Node 16 support.
 
 ## Development
 
