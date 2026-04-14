@@ -9,6 +9,10 @@ inputs:
     description: Github token to use to avoid rate limits
     required: false
     default: ""
+  endpoint:
+    description: Defines the API endpoint to use instead of the default GitHub API. Useful for GitHub Enterprise users if they have the carvel tools in their GitHub instance.
+    required: false
+    default: "https://api.github.com"
   only:
     description: List apps to download if you don't need all
     required: false
