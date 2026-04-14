@@ -1,0 +1,10 @@
+export const info = () => {}
+export const addPath = () => {}
+export const setFailed = () => {}
+export const debug = () => {}
+export const warning = () => {}
+export const error = () => {}
+export const exportVariable = () => {}
+export const getInput = () => ''
+export const setOutput = () => {}
+export const setSecret = () => {}
