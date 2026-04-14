@@ -234,7 +234,7 @@ function createOctokit() {
     }
     else {
         core.warning('No token set, you may experience rate limiting. Set "token: ${{ secrets.GITHUB_TOKEN }}" if you have problems.');
-        return new utils_1.GitHub();
+        return new utils_1.GitHub({ baseUrl: endpoint });
     }
 }
 run();
