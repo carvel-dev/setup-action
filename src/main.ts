@@ -33,7 +33,7 @@ function createOctokit(): Octokit {
     core.warning(
       'No token set, you may experience rate limiting. Set "token: ${{ secrets.GITHUB_TOKEN }}" if you have problems.'
     )
-    return new GitHub() as unknown as Octokit
+    return new GitHub({baseUrl: endpoint}) as unknown as Octokit
   }
 }
 

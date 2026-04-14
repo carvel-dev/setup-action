@@ -74,7 +74,7 @@ When you host the carvel repositories in your own github instance:
 steps:
 - uses: carvel-dev/setup-action@v3
   with:
-    instance: https://acme.github.com/api/v3
+    endpoint: https://acme.github.com/api/v3
     token: token-for-your-instance
 - run: |
     ytt version
