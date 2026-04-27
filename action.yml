@@ -9,6 +9,10 @@ inputs:
     description: Github token to use to avoid rate limits
     required: false
     default: ""
+  endpoint:
+    description: Defines the API base URL to use instead of the default GitHub API. This must be an API URL compatible with Octokit `baseUrl` (for example, `https://HOST/api/v3` for GitHub Enterprise Server), not the GitHub web UI URL.
+    required: false
+    default: "https://api.github.com"
   only:
     description: List apps to download if you don't need all
     required: false

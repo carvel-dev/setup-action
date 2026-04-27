@@ -26,13 +26,14 @@ async function run(): Promise<void> {
 
 function createOctokit(): Octokit {
   const token = core.getInput('token')
+  const endpoint = core.getInput('endpoint')
   if (token) {
-    return github.getOctokit(token)
+    return github.getOctokit(token, {baseUrl: endpoint}) as unknown as Octokit
   } else {
     core.warning(
       'No token set, you may experience rate limiting. Set "token: ${{ secrets.GITHUB_TOKEN }}" if you have problems.'
     )
-    return new GitHub()
+    return new GitHub({baseUrl: endpoint}) as unknown as Octokit
   }
 }
 

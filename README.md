@@ -13,7 +13,7 @@ By default, installs latest versions of `ytt`, `kbld`, `kapp`, `kwt`, `imgpkg`, 
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v2
+- uses: carvel-dev/setup-action@v3
 - run: |
     ytt version
     kbld version
@@ -23,7 +23,7 @@ steps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v2
+- uses: carvel-dev/setup-action@v3
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
 - run: |
@@ -35,7 +35,7 @@ To install only specific apps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v2
+- uses: carvel-dev/setup-action@v3
   with:
     only: ytt, kbld
 - run: |
@@ -47,7 +47,7 @@ To exclude specific apps:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v2
+- uses: carvel-dev/setup-action@v3
   with:
     exclude: kwt, vendir
 - run: |
@@ -59,7 +59,7 @@ To use a specific version of an app:
 
 ```yaml
 steps:
-- uses: carvel-dev/setup-action@v2
+- uses: carvel-dev/setup-action@v3
   with:
     only: ytt, kbld
     kbld: v0.28.0
@@ -67,6 +67,33 @@ steps:
     ytt version
     kbld version
 ```
+
+When you host the carvel repositories in your own github instance:
+
+```yaml
+steps:
+- uses: carvel-dev/setup-action@v3
+  with:
+    endpoint: https://acme.github.com/api/v3
+    token: token-for-your-instance
+- run: |
+    ytt version
+    kbld version
+```
+
+When you are running the action in your own github instance and want to retrieve carvel from the github.com:
+
+```yaml
+steps:
+- uses: carvel-dev/setup-action@v3
+  with:
+    token: TOKEN-FROM-GITHUB.COM
+- run: |
+    ytt version
+    kbld version
+```
+
+
 
 ## Node version support
 
